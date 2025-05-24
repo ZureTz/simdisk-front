@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useContext, useRef } from "react";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
 import {
   Breadcrumb,
@@ -18,17 +21,20 @@ import {
 
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { FilePathContext } from "@/contexts/file-path";
 
-let counter: number = 1; // Counter to keep track of the number of folders
 const FilePath = () => {
-  const [path, setPath] = useState<string[]>([]);
+  const { path, setPath } = useContext(FilePathContext);
   // Initial path "root"
   path[0] = "root";
+
+  // Counter on new folder creation
+  const counter = useRef(0);
 
   // Handle path down logic
   const handlePathDown = () => {
     const newPath = [...path];
-    newPath.push(`New Folder ${counter++}`);
+    newPath.push("New Folder" + counter.current++);
     setPath(newPath);
   };
 
@@ -39,7 +45,7 @@ const FilePath = () => {
       return;
     }
     // Otherwise, remove the last element from the path
-    counter--;
+    counter.current--;
     const newPath = [...path];
     newPath.pop();
     setPath(newPath);
@@ -83,7 +89,7 @@ const FilePath = () => {
 
     // 2 through length - maxItemsDirectlyDisplayed + 1
     // Ignore the elements in between
-    if (index > 1 && index < path.length - maxItemsThatTriggersMenu + 2) {
+    if (index > 1 && index < path.length - maxItemsThatTriggersMenu + 1) {
       return null;
     }
 
@@ -98,7 +104,7 @@ const FilePath = () => {
             <DropdownMenuContent align="start">
               {/*  1 through length - 7 */}
               {path
-                .slice(1, path.length - maxItemsThatTriggersMenu + 2)
+                .slice(1, path.length - maxItemsThatTriggersMenu + 1)
                 .map((item, index) => (
                   <DropdownMenuItem key={index}>
                     <BreadcrumbPage>
@@ -121,7 +127,10 @@ const FilePath = () => {
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between w-full">
+      <div className="flex flex-row items-center justify-around w-full">
+        {/* Home Icon */}
+        {/* Breadcrumb navigation */}
+        <FontAwesomeIcon icon={faHouse} className="mr-2" />
         <Breadcrumb
           className="bg-gray-200 p-4 rounded-lg shadow-md w-9/12 "
           aria-label="Breadcrumb"
@@ -133,7 +142,7 @@ const FilePath = () => {
         <div className="flex flex-row items-center justify-center">
           <Button onClick={handlePathUp}>GO UP</Button>
           {/* A separator vertical line between the buttons */}
-          <Separator orientation="vertical" className="mx-2 h-6" />
+          <Separator orientation="vertical" className="mx-1 h-6" />
           <Button onClick={handlePathDown}>GO DOWN</Button>
         </div>
       </div>
