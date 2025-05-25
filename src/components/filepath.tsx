@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
@@ -19,7 +19,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { FilePathContext } from "@/contexts/file-path";
 
@@ -28,26 +27,23 @@ const FilePath = () => {
   // Initial path "root"
   path[0] = "";
 
-  const counterForNewFolderCreation = useRef(0);
-
-  // Handle path down logic
-  const handlePathDown = () => {
-    const newPath = [...path];
-    newPath.push("New Folder" + counterForNewFolderCreation.current++);
-    setPath(newPath);
-  };
-
   // Handle path up logic
-  const handlePathUp = () => {
+  const onPathUpButtonClicked = () => {
     // Check if there is a path to go down
     if (path.length === 1) {
       return;
     }
     // Otherwise, remove the last element from the path
-    counterForNewFolderCreation.current--;
+
     const newPath = [...path];
     newPath.pop();
     setPath(newPath);
+  };
+
+  // Handle home icon click
+  const onHomeIconClicked = () => {
+    // Reset the path to the initial state
+    setPath([""]);
   };
 
   const breadCrumbItems = path.map((file, index, path) => {
@@ -132,7 +128,12 @@ const FilePath = () => {
       <div className="flex flex-row items-center justify-around w-full">
         {/* Home Icon */}
         {/* Breadcrumb navigation */}
-        <FontAwesomeIcon icon={faHouse} className="mr-2" />
+        <FontAwesomeIcon
+          icon={faHouse}
+          className="mr-2 custom-icon-button"
+          size="lg"
+          onClick={onHomeIconClicked}
+        />
         <Breadcrumb
           className="bg-gray-200 p-4 rounded-lg shadow-md w-9/12 "
           aria-label="Breadcrumb"
@@ -142,10 +143,7 @@ const FilePath = () => {
 
         {/* Button to go up and down the path */}
         <div className="flex flex-row items-center justify-center">
-          <Button onClick={handlePathUp}>GO UP</Button>
-          {/* A separator vertical line between the buttons */}
-          <Separator orientation="vertical" className="mx-1 h-6" />
-          <Button onClick={handlePathDown}>GO DOWN</Button>
+          <Button onClick={onPathUpButtonClicked}>GO UP</Button>
         </div>
       </div>
     </>

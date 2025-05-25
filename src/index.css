@@ -118,7 +118,19 @@
     @apply bg-background text-foreground;
   }
   button:not([disabled]),
-  [role="button"]:not([disabled]) {
+  [role="button"]:not([disabled]),
+  .custom-icon-button {
     cursor: pointer;
+  }
+  /* Custom scrollbar on class "custom-scroll" */
+  .custom-scrollbar {
+    @apply max-h-full overflow-y-auto
+  [&::-webkit-scrollbar]:w-2
+  [&::-webkit-scrollbar-track]:rounded-full
+  [&::-webkit-scrollbar-track]:bg-white
+  [&::-webkit-scrollbar-thumb]:rounded-full
+  [&::-webkit-scrollbar-thumb]:bg-gray-300
+  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500;
   }
 }

@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 
-const handleUploadFile = async () => {
+const handleUploadFile = async (path: string[]) => {
   const selectedFiles: FileList | null = (
     document.getElementById("fileUpload") as HTMLInputElement
   ).files;
@@ -24,11 +24,12 @@ const handleUploadFile = async () => {
 
   console.log("FormData:", formData);
 
-  // POST /api/upload
+  // POST /api/upload?fileCount=${selectedFiles.length}?path=${path.join(",")}
   const pathname =
     "/api/upload?" +
     new URLSearchParams({
       fileCount: selectedFiles.length.toString(),
+      path: path.join(),
     }).toString();
 
   try {
@@ -47,6 +48,7 @@ const handleUploadFile = async () => {
     // If code is 200, show success
 
     toast.success("Files uploaded successfully");
+    
   } catch (error) {
     console.error("Error uploading files:", error);
     toast.error("Error uploading files: " + error);

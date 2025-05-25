@@ -5,10 +5,12 @@ import { Header } from "@/components/header";
 import { FilePath } from "@/components/filepath";
 import { FilePathContext } from "@/contexts/file-path";
 import { UploaderDialog } from "@/components/uploader-dialog";
-import { FileList } from "@/components/file-list";
+import FileListWrapper from "./components/file-list/wrapper";
+import { FileListContext, type fileData } from "./contexts/file-list";
 
 function App() {
   const [path, setPath] = useState<string[]>([]);
+  const [fileListData, setFileListData] = useState<fileData[]>([]);
 
   return (
     <>
@@ -19,23 +21,33 @@ function App() {
           {/* With correct margin , white background, round edge, */}
           <div className="flex flex-col items-center justify-start w-2/3 h-10/12 bg-white rounded-lg shadow-lg p-4">
             {/* File path with breadcrumb and buttons */}
-            <Separator className="my-4" />
-
             {/* A full width file path (1 row) */}
-            {/* <FilePath /> */}
-            <div className="flex flex-row justify-start w-full bg-white rounded-lg shadow-lg p-4">
-              <FilePathContext.Provider value={{ path, setPath }}>
+            <FilePathContext.Provider value={{ path, setPath }}>
+              <div className="flex flex-row justify-start w-full bg-white rounded-lg shadow-lg p-4">
                 <FilePath />
-              </FilePathContext.Provider>
-            </div>
+              </div>
 
-            <Separator className="my-4" />
+              <Separator className="my-4" />
 
-            {/* File list with scrollable area */}
-            {/* <FileList /> */}
+              {/* File list with scrollable area */}
+              {/* <FileList /> */}
+              {/* Overflow control */}
+              <FileListContext.Provider
+                value={{ fileListData, setFileListData }}
+              >
+                <div className="w-full h-full overflow-y-auto">
+                  {/* File Data context provider */}
+                  <FileListWrapper />
+                </div>
 
-            {/* Drawer for uploader */}
-            <UploaderDialog />
+                <Separator className="my-4" />
+
+                {/* Dialog for uploader */}
+                <div className="flex justify-end w-full">
+                  <UploaderDialog />
+                </div>
+              </FileListContext.Provider>
+            </FilePathContext.Provider>
           </div>
         </div>
       </div>
