@@ -12,4 +12,4 @@ const FilePathContext = createContext<FilePathContextType>({
   setPath: () => {},
 });
 
-export { FilePathContext};
+export { FilePathContext };

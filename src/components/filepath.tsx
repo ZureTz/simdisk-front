@@ -26,15 +26,14 @@ import { FilePathContext } from "@/contexts/file-path";
 const FilePath = () => {
   const { path, setPath } = useContext(FilePathContext);
   // Initial path "root"
-  path[0] = "root";
+  path[0] = "";
 
-  // Counter on new folder creation
-  const counter = useRef(0);
+  const counterForNewFolderCreation = useRef(0);
 
   // Handle path down logic
   const handlePathDown = () => {
     const newPath = [...path];
-    newPath.push("New Folder" + counter.current++);
+    newPath.push("New Folder" + counterForNewFolderCreation.current++);
     setPath(newPath);
   };
 
@@ -45,7 +44,7 @@ const FilePath = () => {
       return;
     }
     // Otherwise, remove the last element from the path
-    counter.current--;
+    counterForNewFolderCreation.current--;
     const newPath = [...path];
     newPath.pop();
     setPath(newPath);
@@ -53,7 +52,7 @@ const FilePath = () => {
 
   const breadCrumbItems = path.map((file, index, path) => {
     // Maximum size of the file path that can trigger the menu
-    const maxItemsThatTriggersMenu = 6;
+    const maxItemsThatTriggerDropdownMenu = 7;
 
     const fileItem = (
       <BreadcrumbItem>
@@ -73,23 +72,26 @@ const FilePath = () => {
     );
 
     // If it's the last element in the path, don't show the separator
-    if (index === path.length - 1) {
+    if (index === path.length - 1 && path.length != 1) {
       return fileItem;
     }
 
-    // If path size + 1 <= maxItemsDirectlyDisplayed, show the full path
-    if (path.length <= maxItemsThatTriggersMenu) {
+    // If path size + 1 <= maxItemsThatTriggerDropdownMenu, show the full path
+    if (path.length <= maxItemsThatTriggerDropdownMenu) {
       return fileItemWithSeparator;
     }
 
-    // For cases where path size > maxItemsDirectlyDisplayed, show the first 1 element , ... , and the last maxItemsDirectlyDisplayed - 2 elements
+    // For cases where path size > maxItemsThatTriggerDropdownMenu, show the first 1 element , ... , and the last maxItemsThatTriggerDropdownMenu - 2 elements
     if (index === 0) {
       return fileItemWithSeparator;
     }
 
-    // 2 through length - maxItemsDirectlyDisplayed + 1
+    // 2 through length - maxItemsThatTriggerDropdownMenu + 1
     // Ignore the elements in between
-    if (index > 1 && index < path.length - maxItemsThatTriggersMenu + 1) {
+    if (
+      index > 1 &&
+      index < path.length - maxItemsThatTriggerDropdownMenu + 1
+    ) {
       return null;
     }
 
@@ -104,7 +106,7 @@ const FilePath = () => {
             <DropdownMenuContent align="start">
               {/*  1 through length - 7 */}
               {path
-                .slice(1, path.length - maxItemsThatTriggersMenu + 1)
+                .slice(1, path.length - maxItemsThatTriggerDropdownMenu + 1)
                 .map((item, index) => (
                   <DropdownMenuItem key={index}>
                     <BreadcrumbPage>
