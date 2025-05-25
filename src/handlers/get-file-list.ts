@@ -11,9 +11,6 @@ const useGetFileList = async (path: string[]): Promise<fileData[]> => {
     }).toString();
   console.log("Requesting:", pathname);
 
-  // Sleep 1s
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
   try {
     const response = await fetch(pathname, {
       method: "GET",

@@ -19,7 +19,7 @@ function App() {
         {/* Main content */}
         <div className="flex flex-col items-center justify-center h-full p-4">
           {/* With correct margin , white background, round edge, */}
-          <div className="flex flex-col items-center justify-start w-2/3 h-10/12 bg-white rounded-lg shadow-lg p-4">
+          <div className="custom-container flex flex-col items-center justify-start h-10/12 bg-white rounded-lg shadow-lg p-4">
             {/* File path with breadcrumb and buttons */}
             {/* A full width file path (1 row) */}
             <FilePathContext.Provider value={{ path, setPath }}>

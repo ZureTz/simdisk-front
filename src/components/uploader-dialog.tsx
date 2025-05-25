@@ -8,15 +8,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Toaster } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { handleUploadFile } from "@/handlers/upload-file";
+
+import { FileListContext } from "@/contexts/file-list";
 import { FilePathContext } from "@/contexts/file-path";
+import { handleUploadFile } from "@/handlers/upload-file";
+import { handleGetFileList } from "@/handlers/get-file-list";
 
 const UploaderDialog = () => {
-  const { path, setPath } = useContext(FilePathContext);
+  const { path } = useContext(FilePathContext);
+  const { setFileListData } = useContext(FileListContext);
+
+  const onUploadButtonClicked = async () => {
+    try {
+      await handleUploadFile(path);
+      // Reload the file list after upload
+      const newFileList = await handleGetFileList(path);
+      setFileListData(newFileList);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  };
 
   return (
     <>
@@ -43,11 +58,7 @@ const UploaderDialog = () => {
               <DialogClose asChild>
                 <Button
                   className="ml-10"
-                  onClick={async () => {
-                    await handleUploadFile(path);
-                    // Reload the file list after upload
-                    setPath(path);
-                  }}
+                  onClick={onUploadButtonClicked}
                   type="submit"
                 >
                   Confirm
