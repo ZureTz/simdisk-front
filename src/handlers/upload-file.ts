@@ -22,8 +22,6 @@ const handleUploadFile = async (path: string[]) => {
     formData.append("file" + i, file);
   }
 
-  console.log("FormData:", formData);
-
   // POST /api/upload?fileCount=${selectedFiles.length}?path=${path.join(",")}
   const pathname =
     "/api/upload?" +
@@ -37,8 +35,6 @@ const handleUploadFile = async (path: string[]) => {
       method: "POST",
       body: formData,
     });
-    const json = await response.json();
-    console.log("Response:", json);
 
     // If code is not 200, show error
     if (!response.ok) {

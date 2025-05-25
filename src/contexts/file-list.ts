@@ -7,6 +7,7 @@ export type fileData = {
   filename: string;
   isFolder: boolean;
   size: number;
+  relativePath: string;
 };
 
 // Type of the File System Context

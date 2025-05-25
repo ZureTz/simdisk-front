@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 
 import {
   Breadcrumb,
@@ -21,9 +21,13 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { FilePathContext } from "@/contexts/file-path";
+import { FileListContext } from "@/contexts/file-list";
+import { handleGetFileList } from "@/handlers/get-file-list";
 
 const FilePath = () => {
   const { path, setPath } = useContext(FilePathContext);
+  const { setFileListData } = useContext(FileListContext);
+
   // Initial path "root"
   path[0] = "";
 
@@ -44,6 +48,13 @@ const FilePath = () => {
   const onHomeIconClicked = () => {
     // Reset the path to the initial state
     setPath([""]);
+  };
+
+  // Handle refresh button click
+  const onRefreshButtonClicked = async () => {
+    // Refresh the file list by re-fetching the data
+    const fileListData =await handleGetFileList(path);
+    setFileListData(fileListData);
   };
 
   const breadCrumbItems = path.map((file, index, path) => {
@@ -133,6 +144,12 @@ const FilePath = () => {
           className="mr-2 custom-icon-button"
           size="lg"
           onClick={onHomeIconClicked}
+        />
+        <FontAwesomeIcon
+          icon={faRotateRight}
+          className="mr-2 custom-icon-button"
+          size="lg"
+          onClick={onRefreshButtonClicked}
         />
         <Breadcrumb
           className="bg-gray-200 p-4 rounded-lg shadow-md w-9/12 "

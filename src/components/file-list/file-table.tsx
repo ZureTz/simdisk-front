@@ -35,13 +35,19 @@ export function DataTable<TData, TValue>({
 
   const { path, setPath } = useContext(FilePathContext);
 
-  const onTableRowClick = (row: Row<TData>) => {
+  const onTableRowFileNameClicked = (row: Row<TData>) => {
     const isFolder = row.getValue("isFolder");
     if (!isFolder) {
       // If the clicked row is not a folder, do nothing
       return;
     }
 
+    // If it is "No files found", do nothing
+    if (row.getValue("filename") === "No files found") {
+      return;
+    }
+
+    // If it is a folder, update the path
     const filename: string = row.getValue("filename");
     const newPath = [...path, filename];
     setPath(newPath);
@@ -74,13 +80,36 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                onClick={() => onTableRowClick(row)}
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                {row.getVisibleCells().map((cell) => {
+                  // If the cell is a folder, add onClick handler on the file name cell
+                  if (
+                    cell.row.getValue("isFolder") &&
+                    cell.getValue() === cell.row.getValue("filename")
+                  ) {
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        onClick={() => onTableRowFileNameClicked(row)}
+                        className="cursor-pointer"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    );
+                  }
+
+                  return (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             ))
           ) : (

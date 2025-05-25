@@ -7,6 +7,7 @@ import { FilePathContext } from "@/contexts/file-path";
 import { UploaderDialog } from "@/components/uploader-dialog";
 import FileListWrapper from "./components/file-list/wrapper";
 import { FileListContext, type fileData } from "./contexts/file-list";
+import { CreateNewFolderDialog } from "./components/new-folder-dialog";
 
 function App() {
   const [path, setPath] = useState<string[]>([]);
@@ -23,18 +24,17 @@ function App() {
             {/* File path with breadcrumb and buttons */}
             {/* A full width file path (1 row) */}
             <FilePathContext.Provider value={{ path, setPath }}>
-              <div className="flex flex-row justify-start w-full bg-white rounded-lg shadow-lg p-4">
-                <FilePath />
-              </div>
-
-              <Separator className="my-4" />
-
-              {/* File list with scrollable area */}
-              {/* <FileList /> */}
-              {/* Overflow control */}
               <FileListContext.Provider
                 value={{ fileListData, setFileListData }}
               >
+                <div className="flex flex-row justify-start w-full bg-white rounded-lg shadow-lg p-4">
+                  <FilePath />
+                </div>
+
+                <Separator className="my-4" />
+
+                {/* File list with scrollable area */}
+
                 <div className="w-full h-full overflow-y-auto">
                   {/* File Data context provider */}
                   <FileListWrapper />
@@ -43,7 +43,8 @@ function App() {
                 <Separator className="my-4" />
 
                 {/* Dialog for uploader */}
-                <div className="flex justify-end w-full">
+                <div className="flex justify-end w-full gap-3">
+                  <CreateNewFolderDialog />
                   <UploaderDialog />
                 </div>
               </FileListContext.Provider>

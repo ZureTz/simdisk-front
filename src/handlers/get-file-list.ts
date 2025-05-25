@@ -1,8 +1,7 @@
 import type { fileData } from "@/contexts/file-list";
-import { toast } from "sonner";
 
 // Get file list handler
-const useGetFileList = async (path: string[]): Promise<fileData[]> => {
+const handleGetFileList = async (path: string[]): Promise<fileData[]> => {
   // GET /api/files?path=${path.join(",")}
   const pathname =
     "/api/files?" +
@@ -15,8 +14,6 @@ const useGetFileList = async (path: string[]): Promise<fileData[]> => {
     const response = await fetch(pathname, {
       method: "GET",
     });
-    const json = await response.json();
-    console.log("Response:", json);
 
     // If code is not 200, show error
     if (!response.ok) {
@@ -24,14 +21,13 @@ const useGetFileList = async (path: string[]): Promise<fileData[]> => {
     }
 
     // If code is 200, return the file list
-    toast.success("File list fetched successfully");
+    const json = await response.json();
     return json.files as fileData[];
   } catch (error) {
     // If error, show error message
-    toast.error(`Error fetching file list: ${error}`);
     console.error("Error fetching file list:", error);
     throw new Error(`Error fetching file list: ${error}`);
   }
 };
 
-export { useGetFileList as handleGetFileList };
+export { handleGetFileList };

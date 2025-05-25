@@ -1,5 +1,10 @@
-import { faCopy, faFolder, faFile } from "@fortawesome/free-regular-svg-icons";
-import { faCloudArrowDown } from "@fortawesome/free-solid-svg-icons";
+import { faFolder, faFile } from "@fortawesome/free-regular-svg-icons";
+import {
+  faCopy,
+  faCloudArrowDown,
+  faDeleteLeft,
+  faFileHalfDashed,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
@@ -14,14 +19,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import type { fileData } from "@/contexts/file-list";
 import { toast } from "sonner";
+
+import type { fileData } from "@/contexts/file-list";
+import { handleDeleteFile } from "@/handlers/delete-file";
+import { handleDownloadFile } from "@/handlers/download-file";
 
 export const columns: ColumnDef<fileData>[] = [
   {
     accessorKey: "isFolder",
     header: "Type",
     cell: ({ row }) =>
+      // If file name is "No files found", return
+      row.getValue("filename") === "No files found" ? (
+        <FontAwesomeIcon size="xl" icon={faFileHalfDashed} />
+      ) : // If is folder, return folder icon, otherwise return file icon
       row.getValue("isFolder") ? (
         <FontAwesomeIcon size="xl" icon={faFolder} />
       ) : (
@@ -93,7 +105,15 @@ export const columns: ColumnDef<fileData>[] = [
         }
       };
 
-      const onDownloadFileClicked = () => {};
+      const onDownloadFileClicked = async () => {
+        console.log("Relative path to file:", file.relativePath);
+        await handleDownloadFile(file.relativePath.split("/"), file.filename);
+      };
+
+      const onDeleteFileClicked = async () => {
+        console.log("Relative path to file:", file.relativePath);
+        await handleDeleteFile(file.relativePath.split("/"), file.filename);
+      };
 
       const ConditionalShowDownload = ({ isFolder }: { isFolder: boolean }) => {
         if (isFolder) {
@@ -103,11 +123,30 @@ export const columns: ColumnDef<fileData>[] = [
         // Otherwise, show download option
         return (
           <>
-            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={onDownloadFileClicked}>
               <span className="flex items-center gap-2">
                 <FontAwesomeIcon icon={faCloudArrowDown} />
                 Download
+              </span>
+            </DropdownMenuItem>
+          </>
+        );
+      };
+
+      const ConditionalShowDelete = ({ filename }: { filename: string }) => {
+        if (filename === "No files found") {
+          // Don't show delete option for "No files found"
+          return <></>;
+        }
+
+        // Otherwise, show delete option
+        return (
+          <>
+            <DropdownMenuItem onClick={onDeleteFileClicked}>
+              <span className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faDeleteLeft} />
+                {/* With red color for warning */}
+                <span className="text-red-500">Delete</span>
               </span>
             </DropdownMenuItem>
           </>
@@ -127,6 +166,7 @@ export const columns: ColumnDef<fileData>[] = [
               {/* Bold */}
               <span className="font-semibold">Actions</span>
             </DropdownMenuLabel>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={onCopyFileNameClicked}>
               <span className="flex items-center gap-2">
                 <FontAwesomeIcon icon={faCopy} />
@@ -134,6 +174,7 @@ export const columns: ColumnDef<fileData>[] = [
               </span>
             </DropdownMenuItem>
             <ConditionalShowDownload isFolder={file.isFolder} />
+            <ConditionalShowDelete filename={file.filename} />
           </DropdownMenuContent>
         </DropdownMenu>
       );
