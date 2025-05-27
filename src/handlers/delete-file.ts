@@ -12,9 +12,6 @@ const handleDeleteFile = async (path: string[], fileName: string) => {
     const formData = new FormData();
     formData.append("fileName", fileName);
 
-    // Log the request path and file name
-    console.log("Requesting:", pathname, "with fileName:", fileName);
-
     const response = await fetch(pathname, {
       method: "DELETE",
       body: formData,

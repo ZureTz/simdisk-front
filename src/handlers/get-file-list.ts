@@ -8,7 +8,6 @@ const handleGetFileList = async (path: string[]): Promise<fileData[]> => {
     new URLSearchParams({
       path: path.join(),
     }).toString();
-  console.log("Requesting:", pathname);
 
   try {
     const response = await fetch(pathname, {

@@ -106,12 +106,10 @@ export const columns: ColumnDef<fileData>[] = [
       };
 
       const onDownloadFileClicked = async () => {
-        console.log("Relative path to file:", file.relativePath);
         await handleDownloadFile(file.relativePath.split("/"), file.filename);
       };
 
       const onDeleteFileClicked = async () => {
-        console.log("Relative path to file:", file.relativePath);
         await handleDeleteFile(file.relativePath.split("/"), file.filename);
       };
 

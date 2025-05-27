@@ -14,7 +14,6 @@ const handleCreateNewFolder = async (path: string[]) => {
 
   // Log the folder name
   const folderName = folderNameInput.value.trim();
-  console.log("Folder name:", folderName);
 
   // Put the folder name into FormData
   const formData = new FormData();

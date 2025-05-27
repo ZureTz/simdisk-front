@@ -11,9 +11,6 @@ const handleUploadFile = async (path: string[]) => {
     return;
   }
 
-  // Log the selected file
-  // console.log("Selected files:", selectedFiles);
-
   // Append the file to FormData
   const formData = new FormData();
   for (let i = 0; i < selectedFiles.length; i++) {

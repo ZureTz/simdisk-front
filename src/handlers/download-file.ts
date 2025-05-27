@@ -3,8 +3,6 @@ import { toast } from "sonner";
 // GET /api/download?path=${file.relativePath.join()}?fileName=${file.filename}
 const handleDownloadFile = async (path: string[], fileName: string) => {
   const fullFileName = path.join();
-  console.log("Relative path to file:", fullFileName);
-  console.log("File for download:", fileName);
 
   const pathname =
     "/api/download?" +
