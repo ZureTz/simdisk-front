@@ -2,7 +2,7 @@ import { faFolder, faFile } from "@fortawesome/free-regular-svg-icons";
 import {
   faCopy,
   faCloudArrowDown,
-  faDeleteLeft,
+  // faDeleteLeft,
   faFileHalfDashed,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,7 +22,7 @@ import {
 import { toast } from "sonner";
 
 import type { fileData } from "@/contexts/file-list";
-import { handleDeleteFile } from "@/handlers/delete-file";
+// import { handleDeleteFile } from "@/handlers/delete-file";
 import { handleDownloadFile } from "@/handlers/download-file";
 
 export const columns: ColumnDef<fileData>[] = [
@@ -113,9 +113,9 @@ export const columns: ColumnDef<fileData>[] = [
         await handleDownloadFile(file.relativePath.split("/"), file.filename);
       };
 
-      const onDeleteFileClicked = async () => {
-        await handleDeleteFile(file.relativePath.split("/"), file.filename);
-      };
+      // const onDeleteFileClicked = async () => {
+      //   await handleDeleteFile(file.relativePath.split("/"), file.filename);
+      // };
 
       const ConditionalShowDownload = ({ isFolder }: { isFolder: boolean }) => {
         if (isFolder) {
@@ -143,15 +143,16 @@ export const columns: ColumnDef<fileData>[] = [
 
         // Otherwise, show delete option
         return (
-          <>
-            <DropdownMenuItem onClick={onDeleteFileClicked}>
-              <span className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faDeleteLeft} />
-                {/* With red color for warning */}
-                <span className="text-red-500">Delete</span>
-              </span>
-            </DropdownMenuItem>
-          </>
+          // <>
+          //   <DropdownMenuItem onClick={onDeleteFileClicked}>
+          //     <span className="flex items-center gap-2">
+          //       <FontAwesomeIcon icon={faDeleteLeft} />
+          //       {/* With red color for warning */}
+          //       <span className="text-red-500">Delete</span>
+          //     </span>
+          //   </DropdownMenuItem>
+          // </>
+          <></>
         );
       };
 
