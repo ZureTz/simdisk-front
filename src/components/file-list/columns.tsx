@@ -53,6 +53,10 @@ export const columns: ColumnDef<fileData>[] = [
       if (row.getValue("isFolder")) {
         return <span className="font-mono">----</span>;
       }
+      // If is "No files found", return "----"
+      if (row.getValue("filename") === "No files found") {
+        return <span className="font-mono">----</span>;
+      }
 
       const size: string = row.getValue("size");
       // Convert size from string to number
